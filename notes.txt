@@ -1,5 +1,0 @@
-## Redhat
-
-`yum install git epel-release`
-
-`yum install ansible`
