@@ -1,0 +1,22 @@
+---
+ - name: Clone VMs
+   hosts: localhost 
+   gather_facts: false
+   vars_files:
+     vars.yml
+   tasks: 
+   - name: Clone multiple VMs from template
+     local_action:
+       module: vmware_guest
+       hostname: "{{ vcenter_hostname }}"
+       username: "{{ username }}"
+       password: "{{ password }}"
+       validate_certs: no      
+       folder: "{{ folder }}"
+       template: "{{ item.template }}"
+       name: "{{ item.name }}"
+       esxi_hostname: "{{ esxi_hostname }}"
+       datacenter: "{{ datacenter }}"
+       state: "{{ state }}"
+       # customization_spec: "{{ customization_spec }}"
+     with_items: "{{ servers }}" 
