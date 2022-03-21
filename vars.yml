@@ -1,0 +1,22 @@
+vcenter_hostname: 192.168.0.4
+username: learntolinux@vsphere.local
+password: Wh@F8H62r7Ru7TE
+notes:  Automated VM creation test
+folder: LearntoLinux
+datastore: SSD
+datacenter: LearntoLinux
+customization_spec: CloudLocalServerDHCP
+esxi_hostname: 192.168.0.42
+state: poweredon
+servers:
+        - { name: centos8_01, template: centos8 }
+        - { name: centos7_01, template: centos7-minimal }
+        - { name: ubuntu18_01, template: ubuntu18 }
+        - { name: ubuntu20, template: ubuntu20 }
+        - { name: ubuntu21, template: ubuntu21 }
+        - { name: windows10_01, template: windows10pro-template }
+        - { name: windows2019, template: windows2019server-template }
+        - { name: rhel7_01, template: Rhel7_Template }
+        - { name: rhel8_01, template: Rhel8_Template }
+        - { name: rhel9_01, template: Rhel9_Template }
+
