@@ -26,6 +26,6 @@
 
    - name: Output
      debug:
-        msg: " _result.results"
+        msg: "{{_result}}"
 
 
