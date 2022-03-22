@@ -1,22 +1,31 @@
 ---
  - name: Clone VMs
    hosts: localhost 
-   gather_facts: false
+   gather_facts: false # We are not gathering facts on hosts, this speeds this playbook up
    vars_files:
-     vars.yml
+      - vars.yml # A file containing all the build information
+      - secrets.yml # A secrets file (that you could vault) holding credentials
    tasks: 
    - name: Clone multiple VMs from template
-     local_action:
-       module: vmware_guest
-       hostname: "{{ vcenter_hostname }}"
-       username: "{{ username }}"
-       password: "{{ password }}"
-       validate_certs: no      
-       folder: "{{ folder }}"
-       template: "{{ item.template }}"
-       name: "{{ item.name }}"
-       esxi_hostname: "{{ esxi_hostname }}"
-       datacenter: "{{ datacenter }}"
-       state: "{{ state }}"
+     local_action: # We are doing a 'local action' on this host, instead of itterating through a list in an inventory
+       module: vmware_guest # Which ansible module we are using
+       hostname: "{{ vcenter_hostname }}" # Hostname for vCetner
+       username: "{{ username }}" # Username for vCenter
+       password: "{{ password }}" # Password for vCenter
+       validate_certs: no # As this is a lab, I have self signed certificates, the default is yes, so specify no if you have self signed certs
+       folder: "{{ folder }}" # Which folder you are putting this Virtual Machine into (if you don't specify it will go into the root)
+       template: "{{ item.template }}" # Which template you are cloning from
+       name: "{{ item.name }}" # The name of the Virtual Machine
+       esxi_hostname: "{{ esxi_hostname }}" # Which ESXI server are we using to deploy (You can also use cluster and give the cluster name)
+       datacenter: "{{ datacenter }}" # Which datacenter are we deploying this to in vSphere
+       state: "{{ state }}" # We want this to be powered on / powered off etc
+       wait_for_ip_address: Yes # Needs VMWare tools working properly to know there is an IP Address
        # customization_spec: "{{ customization_spec }}"
-     with_items: "{{ servers }}" 
+     with_items: "{{ servers }}" # We are looping through a variable called servers
+     register: _result # Register the output to this variable so we can output it later
+
+   - name: Output
+     debug:
+        msg: " _result.results"
+
+
